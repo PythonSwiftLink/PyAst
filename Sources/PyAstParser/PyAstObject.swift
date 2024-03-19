@@ -7,6 +7,7 @@ import Foundation
 import PySwiftCore
 import PyDecode
 import PyEncode
+import PythonCore
 
 extension PyPointer {
 	public var string: String { .init(cString: PyUnicode_AsUTF8(self)) }
