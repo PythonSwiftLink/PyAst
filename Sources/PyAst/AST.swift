@@ -6,12 +6,29 @@
 //
 
 import Foundation
-import PySwiftCore
-import PyCodable
+//import PySwiftCore
+//import PyCodable
+
+
+
+public protocol Stmt: AstProtocol, Codable {
+	var type: AST.StmtType { get }
+}
+
+public protocol ExprProtocol: AstProtocol, Codable {
+	var type: AST.ExprType { get }
+}
+
+
 
 public struct AST {
 	public enum AstType: String, Codable {
 		case Module
+		
+		public func encode(to encoder: Encoder) throws {
+			var c = try encoder.singleValueContainer()
+			try c.encode(AST.__classinfo__(__class__: .init(__name__: rawValue)).__class__)
+		}
 	}
 	
 	public enum StmtType: String, Codable {
@@ -41,6 +58,12 @@ public struct AST {
 		case Pass
 		case Break
 		case Continue
+		
+		public func encode(to encoder: Encoder) throws {
+			var c = try encoder.singleValueContainer()
+			try c.encode(AST.__classinfo__(__class__: .init(__name__: rawValue)).__class__)
+		}
+		
 	}
 	
 	public enum ExprType: String, Codable {
@@ -72,13 +95,18 @@ public struct AST {
 		case List
 		case Tuple
 		case NoneType
+		
+		public func encode(to encoder: Encoder) throws {
+			var c = try encoder.singleValueContainer()
+			try c.encode(AST.__classinfo__(__class__: .init(__name__: rawValue)).__class__)
+		}
 	}
 	
-	public struct __classinfo__: Decodable {
+	public struct __classinfo__: Codable {
 		
 		let __class__: ClassName
 		
-		public struct ClassName: Decodable {
+		public struct ClassName: Codable {
 			let __name__: String
 		}
 	}
@@ -90,6 +118,8 @@ extension AST {
 	
 	
 	final public class Module: Codable {
+		
+		
 		
 		public var description: String { name }
 		
@@ -104,6 +134,11 @@ extension AST {
 		
 		enum CodingKeys: CodingKey {
 			case body
+			case __class__
+		}
+		
+		public init(body: [Stmt]) {
+			self.body = body
 		}
 		
 		public init(from decoder: Decoder) throws {
@@ -111,13 +146,57 @@ extension AST {
 			body = try c.decode([Stmt].self, forKey: .body)
 		}
 		public func encode(to encoder: Encoder) throws {
-			
+			var c = encoder.container(keyedBy: CodingKeys.self)
+			try c.encode(type, forKey: .__class__)
+			try c.encode(body, forKey: .body)
 		}
 	}
 	
 }
 
 
+
+extension KeyedEncodingContainer {
+	
+	
+	public mutating func encode(_ value: [any Stmt], forKey key: KeyedEncodingContainer<K>.Key) throws {
+		var c = nestedUnkeyedContainer(forKey: key)
+		for stmt in value {
+			try c.encode(stmt)
+		}
+	}
+	
+	public mutating func encode(_ value: [any ExprProtocol], forKey key: KeyedEncodingContainer<K>.Key) throws {
+		var c = nestedUnkeyedContainer(forKey: key)
+		for expr in value {
+			try c.encode(expr)
+		}
+	}
+	
+	public mutating func encode(_ value: [(any ExprProtocol)?], forKey key: KeyedEncodingContainer<K>.Key) throws {
+		var c = nestedUnkeyedContainer(forKey: key)
+		for expr in value {
+			if let expr = expr {
+				try c.encode(expr)
+			} else { try c.encodeNil() }
+		}
+	}
+	
+	public mutating func encodeIfPresent(_ value: (any ExprProtocol)?, forKey key: KeyedEncodingContainer<K>.Key) throws {
+		//var c = nestedUnkeyedContainer(forKey: key)
+		
+		if let value = value {
+			try encode(value, forKey: key)
+			//			switch value.type {
+			//			case .Name: fatalError()
+			//			case .NamedExpr: fatalError()
+			//			default: fatalError("\(value.type)")
+			//			}
+		} else {
+			try encodeNil(forKey: key)
+		}
+	}
+}
 
 
 extension SingleValueDecodingContainer {
@@ -128,9 +207,7 @@ extension SingleValueDecodingContainer {
 }
 
 extension Decoder {
-	func yourmom() {
-		
-	}
+
 }
 func type2Expr(_ t: AST.ExprType) -> ExprProtocol.Type {
 	switch t {
@@ -205,13 +282,45 @@ extension KeyedDecodingContainer {
 		let t: AST.ExprType = try decode(AstType: key)
 		return try decode(type2Expr(t), forKey: key)
 	}
+	public func decode(forKey key: KeyedDecodingContainer<K>.Key) throws -> (any AstOperator) {
+		let t: AST.Operator.OperatorType = try decode(OperatorType: key)
+		return try decode(type2Op(t), forKey: key)
+	}
 //	public func decode(_ type: Expr.Type, forKey key: KeyedDecodingContainer<K>.Key) throws -> Expr {
 //		fatalError()
 //	}
 	
 }
 
+fileprivate struct __classname__: Decodable, CustomStringConvertible {
+	struct __classinfo__: Decodable {
+		let __name__: String
+	}
+	//let wrapped: __name__
+	let __class__: __classinfo__
+	
+	var description: String { __class__.__name__ }
+}
+
 extension KeyedDecodingContainer {
+	
+	fileprivate enum __object__CodingKeys: CodingKey {
+		case __class__
+	}
+	fileprivate enum __class__CodingKeys: CodingKey {
+		case __name__
+	}
+	func decode(__class__ key: KeyedDecodingContainer<K>.Key) throws -> String {
+		try decode(__classname__.self, forKey: key).description
+		//		let __object__ = try nestedContainer(keyedBy: __object__CodingKeys.self, forKey: key)
+		//		let __class__ = try __object__.nestedContainer(keyedBy: __class__CodingKeys.self, forKey: .__class__)
+		//return try __class__.decode(String.self, forKey: .__name__)
+	}
+}
+
+extension KeyedDecodingContainer {
+	
+
 	
 	func decode(AstType key: KeyedDecodingContainer<K>.Key) throws -> AST.AstType {
 		let t = try decode(__class__: key)
@@ -223,6 +332,11 @@ extension KeyedDecodingContainer {
 		return .init(rawValue: t)!
 	}
 	func decode(AstType key: KeyedDecodingContainer<K>.Key) throws -> AST.ExprType {
+		let t = try decode(AST.__classinfo__.self, forKey: key).__class__.__name__
+		return .init(rawValue: t)!
+	}
+	
+	func decode(OperatorType key: KeyedDecodingContainer<K>.Key) throws -> AST.Operator.OperatorType {
 		let t = try decode(AST.__classinfo__.self, forKey: key).__class__.__name__
 		return .init(rawValue: t)!
 	}
@@ -253,7 +367,7 @@ extension KeyedDecodingContainer {
 		var out = [AST.StmtType]()
 		
 		while !c.isAtEnd {
-			let t = try c.decode(AST.__classinfo__.self).__class__.__name__
+			let t = try! c.decode(AST.__classinfo__.self).__class__.__name__
 			out.append(.init(rawValue: t)! )
 		}
 		return out
@@ -319,6 +433,3 @@ extension UnkeyedDecodingContainer {
 }
 
 
-extension PyDecoder {
-	
-}

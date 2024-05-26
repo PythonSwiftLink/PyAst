@@ -4,6 +4,7 @@ import Foundation
 import PyCodable
 import PySwiftCore
 import PythonCore
+import PyAst
 
 let ast_parser = pythonImport(from: "ast", import_name: "parse")
 

@@ -1,20 +1,15 @@
-//
-//  File.swift
-//  
-//
-//  Created by CodeBuilder on 11/02/2024.
-//
 
 import Foundation
 
 
-public extension AST {
-	
-	struct Expr: Stmt {
+extension AST {
+	/*
+	 
+	 */
+	public struct Alias: AstProtocol {
 		
-		var value: ExprProtocol
-		
-		public var type: AST.StmtType = .Expr
+		public var name: String
+		public var asname: String?
 		
 		public var lineno: Int
 		public var col_offset: Int
@@ -23,10 +18,10 @@ public extension AST {
 		public let end_col_offset: Int?
 		public let type_comment: String?
 		
-		//public var description: String { value.description }
-		
 		enum CodingKeys: CodingKey {
-			case value
+			case __class__
+			case name
+			case asname
 			
 			case lineno
 			case col_offset
@@ -38,7 +33,8 @@ public extension AST {
 		public init(from decoder: Decoder) throws {
 			let c: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)
 			
-			value = try c.decode(ExprProtocol.self, forKey: .value)
+			name = try c.decode(String.self, forKey: .name)
+			asname = try c.decodeIfPresent(String.self, forKey: .asname)
 			
 			lineno = try c.decode(Int.self, forKey: .lineno)
 			col_offset = try c.decode(Int.self, forKey: .col_offset)
@@ -50,14 +46,17 @@ public extension AST {
 		
 		public func encode(to encoder: Encoder) throws {
 			
-			var container = encoder.container(keyedBy: CodingKeys.self)
+			var c = encoder.container(keyedBy: CodingKeys.self)
+//			try c.encode(type, forKey: .__class__)
+			try c.encode(name, forKey: .name)
+			try c.encode(asname, forKey: .asname)
 			
-			try container.encode(self.lineno, forKey: .lineno)
-			try container.encode(self.end_lineno, forKey: .end_lineno)
-			try container.encode(self.col_offset, forKey: .col_offset)
-			try container.encode(self.end_col_offset, forKey: .end_col_offset)
-			fatalError("encoding of \(Self.self) is missing")
+			try c.encode(lineno, forKey: .lineno)
+			try c.encode(col_offset, forKey: .col_offset)
+			try c.encode(end_lineno, forKey: .end_lineno)
+			try c.encode(end_col_offset, forKey: .end_col_offset)
+			try c.encode(type_comment, forKey: .type_comment)
+			//fatalError("encoding of \(Self.self) is missing")
 		}
 	}
-
 }

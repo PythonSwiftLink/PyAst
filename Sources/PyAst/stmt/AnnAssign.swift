@@ -18,6 +18,19 @@ public extension AST {
 	 */
 	
 	public struct AnnAssign: Stmt {
+		public init(type: AST.StmtType = .AnnAssign, target: ExprProtocol, annotation: ExprProtocol, value: ExprProtocol? = nil, simple: Int, lineno: Int, col_offset: Int, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil) {
+			self.type = type
+			self.target = target
+			self.annotation = annotation
+			self.value = value
+			self.simple = simple
+			self.lineno = lineno
+			self.col_offset = col_offset
+			self.end_lineno = end_lineno
+			self.end_col_offset = end_col_offset
+			self.type_comment = type_comment
+		}
+		
 		
 		
 		public var type: StmtType = .AnnAssign
@@ -49,7 +62,7 @@ public extension AST {
 			let c = try decoder.container(keyedBy: CodingKeys.self)
 			target = try c.decode(ExprProtocol.self, forKey: .target)
 			annotation = try c.decode(ExprProtocol.self, forKey: .annotation)
-			value = try try c.decodeIfPresent(ExprProtocol.self, forKey: .value)
+			value = try c.decodeIfPresent(ExprProtocol.self, forKey: .value)
 			simple = try c.decode(Int.self, forKey: .simple)
 			
 			lineno = try c.decode(Int.self, forKey: .lineno)
@@ -60,6 +73,7 @@ public extension AST {
 			//fatalError()
 		}
 		enum CodingKeys: CodingKey {
+			case __class__
 			case target
 			case annotation
 			case value
@@ -73,7 +87,19 @@ public extension AST {
 		}
 		//
 		public func encode(to encoder: Encoder) throws {
-			fatalError()
+			var c = encoder.container(keyedBy: CodingKeys.self)
+			try c.encode(type, forKey: .__class__)
+			try c.encode(target, forKey: .target)
+			try c.encode(annotation, forKey: .annotation)
+			try c.encodeIfPresent( value, forKey: .value)
+			try c.encode(simple, forKey: .simple)
+			
+			try c.encode(lineno, forKey: .lineno)
+			try c.encode(col_offset, forKey: .col_offset)
+			try c.encode(end_lineno, forKey: .end_lineno)
+			try c.encode(end_col_offset, forKey: .end_col_offset)
+			try c.encode(type_comment, forKey: .type_comment)
+			
 		}
 	}
 	

@@ -6,9 +6,9 @@ extension AST {
 	/*
 	 
 	 */
-	public struct Keyword: AstProtocol {
-		public var arg: String?
-		public var value: ExprProtocol
+	public struct WithItem: AstProtocol {
+		public var context_expr: ExprProtocol
+		public var optional_vars: ExprProtocol?
 		
 		public var lineno: Int
 		public var col_offset: Int
@@ -18,8 +18,9 @@ extension AST {
 		public let type_comment: String?
 		
 		enum CodingKeys: CodingKey {
-			case arg
-			case value
+			case __class__
+			case context_expr
+			case optional_vars
 			
 			case lineno
 			case col_offset
@@ -31,15 +32,15 @@ extension AST {
 		public init(from decoder: Decoder) throws {
 			let c: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)
 			
-			arg = try c.decodeIfPresent(String.self, forKey: .arg)
-			value = try c.decode(ExprProtocol.self, forKey: .value)
+			context_expr = try c.decode(ExprProtocol.self, forKey: .context_expr)
+			optional_vars = try c.decodeIfPresent(ExprProtocol.self, forKey: .optional_vars)
 			
 			lineno = try c.decode(Int.self, forKey: .lineno)
 			col_offset = try c.decode(Int.self, forKey: .col_offset)
 			end_lineno = try c.decodeIfPresent(Int.self, forKey: .end_lineno)
 			end_col_offset = try c.decodeIfPresent(Int.self, forKey: .end_col_offset)
 			type_comment = try c.decodeIfPresent(String.self, forKey: .type_comment)
-			//fatalError("decoding of \(Self.self) is missing")
+			fatalError("decoding of \(Self.self) is missing")
 		}
 		
 		public func encode(to encoder: Encoder) throws {

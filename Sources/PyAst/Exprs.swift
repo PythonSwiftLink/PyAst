@@ -1,26 +1,58 @@
 import Foundation
 
 
-extension AST {
-	
-	public enum Operator: String, Codable {
-		case Add
-		case BitAnd
-		case BitOr
-		case BitXor
-		case Div
-		case FloorDiv
-		case LShift
-		case Mod
-		case Mult
-		case MatMult
-		case Pow
-		case RShift
-		case Sub
+struct __classname__encode: Codable, CustomStringConvertible {
+	struct __classinfo__: Codable {
+		let __name__: String
 		
+		enum CodingKeys: CodingKey {
+			case __class__
+			case __name__
+		}
 		
+		init(from decoder: Decoder) throws {
+			let container: KeyedDecodingContainer<__classname__encode.__classinfo__.CodingKeys> = try decoder.container(keyedBy: __classname__encode.__classinfo__.CodingKeys.self)
+			
+			self.__name__ = try container.decode(String.self, forKey: __classname__encode.__classinfo__.CodingKeys.__name__)
+			
+		}
+		
+		func encode(to encoder: Encoder) throws {
+			var container: KeyedEncodingContainer<__classname__encode.__classinfo__.CodingKeys> = encoder.container(keyedBy: __classname__encode.__classinfo__.CodingKeys.self)
+			
+			try container.encode(self.__name__, forKey: __classname__encode.__classinfo__.CodingKeys.__name__)
+		}
 		
 	}
+	//let wrapped: __name__
+	let __class__: __classinfo__
+	
+	var description: String { __class__.__name__ }
+	
+	enum CodingKeys: CodingKey {
+		case __class__
+	}
+	
+	init(from decoder: Decoder) throws {
+		let container: KeyedDecodingContainer<__classname__encode.CodingKeys> = try decoder.container(keyedBy: __classname__encode.CodingKeys.self)
+		
+		self.__class__ = try container.decode(__classname__encode.__classinfo__.self, forKey: __classname__encode.CodingKeys.__class__)
+		
+	}
+	
+	func encode(to encoder: Encoder) throws {
+		var container: KeyedEncodingContainer<__classname__encode.CodingKeys> = encoder.container(keyedBy: __classname__encode.CodingKeys.self)
+		
+		try container.encode(self.__class__, forKey: __classname__encode.CodingKeys.__class__)
+	}
+	
+	
+	
+}
+
+extension AST {
+	
+	
 	
 	public struct BoolOp: ExprProtocol {
 		public var lineno: Int
@@ -31,14 +63,15 @@ extension AST {
 		
 		public var type: AST.ExprType = .BoolOp
 		
-		public var op: Operator
+		public var op: any AstOperator
 		public var values: [ExprProtocol]
 		
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
-			case arg
-			case value
+			case __class__
+			case values
+			case op
 			
 			case lineno
 			case col_offset
@@ -49,7 +82,8 @@ extension AST {
 		
 		public init(from decoder: Decoder) throws {
 			let c: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)
-			
+			op = try c.decode(forKey: .op)
+			values = try c.decode([any ExprProtocol].self, forKey: .values)
 			lineno = try c.decode(Int.self, forKey: .lineno)
 			col_offset = try c.decode(Int.self, forKey: .col_offset)
 			end_lineno = try c.decodeIfPresent(Int.self, forKey: .end_lineno)
@@ -61,7 +95,9 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
+			try container.encode(op, forKey: .op)
+			try container.encode(values, forKey: .values)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -78,7 +114,7 @@ extension AST {
 		public var type_comment: String?
 		
 		public var left: ExprProtocol
-		var op: Operator
+		var op: any AstOperator
 		public var right: ExprProtocol
 		
 		//public var description: String
@@ -86,6 +122,7 @@ extension AST {
 		public let type: AST.ExprType = .BinOp
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case left
 			case op
 			case right
@@ -101,7 +138,8 @@ extension AST {
 			
 			let c: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)
 			left = try c.decode(ExprProtocol.self, forKey: .left)
-			op = .init(rawValue: try c.decode(__class__: .op)) ?? .BitOr
+			//op = .init(rawValue: try c.decode(__class__: .op)) ?? .BitOr
+			op = try c.decode(forKey: .op)
 			right = try c.decode(ExprProtocol.self, forKey: .right)
 			
 			lineno = try c.decode(Int.self, forKey: .lineno)
@@ -115,12 +153,17 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
+			try container.encode(type, forKey: .__class__)
+			try container.encode(self.left, forKey: .left)
+			try container.encode(self.op, forKey: .op)
+			try container.encode(self.right, forKey: .right)
 			
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
 			try container.encode(self.end_col_offset, forKey: .end_col_offset)
-			fatalError("encoding of \(Self.self) is missing")
+			try container.encode(type_comment, forKey: .type_comment)
+			//fatalError("encoding of \(Self.self) is missing")
 		}
 	}
 	
@@ -139,6 +182,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -163,7 +207,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -186,6 +230,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -210,7 +255,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -234,6 +279,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -258,7 +304,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -281,6 +327,7 @@ extension AST {
 		//public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case keys
 			case values
 			
@@ -306,12 +353,15 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
+			try container.encode(type, forKey: .__class__)
+			try container.encode(keys, forKey: .keys)
+			try container.encode(values, forKey: .values)
 			
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
 			try container.encode(self.end_col_offset, forKey: .end_col_offset)
-			fatalError("encoding of \(Self.self) is missing")
+			try container.encode(type_comment, forKey: .type_comment)
 		}
 	}
 	
@@ -328,6 +378,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -352,7 +403,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -377,6 +428,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -401,7 +453,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -424,6 +476,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -472,6 +525,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -496,7 +550,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -519,6 +573,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -543,7 +598,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -565,6 +620,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -589,7 +645,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -611,6 +667,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -657,6 +714,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -681,7 +739,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -705,6 +763,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -729,7 +788,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -754,6 +813,7 @@ extension AST {
 		//public var description: String
 		
 		enum CodingKeys: String, CodingKey {
+			case __class__
 			case `func` = "func"
 			case args
 			case keywords
@@ -783,12 +843,16 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
+			try container.encode(type, forKey: .__class__)
+			try container.encode(self._func, forKey: .func)
+			try container.encode(self.args, forKey: .args)
+			try container.encode(self.keywords, forKey: .keywords)
 			
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
 			try container.encode(self.end_col_offset, forKey: .end_col_offset)
-			fatalError("encoding of \(Self.self) is missing")
+			//fatalError("encoding of \(Self.self) is missing")
 		}
 	}
 	
@@ -807,6 +871,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -831,7 +896,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -853,6 +918,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -877,7 +943,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -903,6 +969,7 @@ extension AST {
 		public var description: String { "( <\(Self.self)> \(value) )" }
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case value
 			case kind
 			case n
@@ -939,12 +1006,15 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
+			try container.encode(value ?? "None", forKey: .value)
+			try container.encodeIfPresent(kind, forKey: .kind)
+			try container.encode(n, forKey: .n)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
 			try container.encode(self.end_col_offset, forKey: .end_col_offset)
-			fatalError("encoding of \(Self.self) is missing")
+			//fatalError("encoding of \(Self.self) is missing")
 		}
 		
 		public var intValue: Int? {
@@ -971,6 +1041,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -995,7 +1066,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -1019,6 +1090,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -1043,7 +1115,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -1067,6 +1139,7 @@ extension AST {
 		public var description: String { "(\(Self.self) lower: \(lower), upper: \(upper), step: \(step)"}
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case lower
 			case upper
 			case step
@@ -1095,7 +1168,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -1122,6 +1195,7 @@ extension AST {
 		public var description: String { "(\(Self.self) value: \(value), slice: \(slice)"}
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case value
 			case slice
 			
@@ -1148,12 +1222,15 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
+			try container.encode(type, forKey: .__class__)
+			try container.encode(self.value, forKey: .value)
+			try container.encode(self.slice, forKey: .slice)
 			
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
 			try container.encode(self.end_col_offset, forKey: .end_col_offset)
-			fatalError("encoding of \(Self.self) is missing")
+			//fatalError("encoding of \(Self.self) is missing")
 		}
 	}
 	
@@ -1170,6 +1247,7 @@ extension AST {
 		public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case arg
 			case value
 			
@@ -1194,7 +1272,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -1227,6 +1305,7 @@ extension AST {
 		public var description: String { id }
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case id
 			//case value
 			
@@ -1251,12 +1330,13 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
+			try container.encode(self.id, forKey: .id)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
 			try container.encode(self.end_col_offset, forKey: .end_col_offset)
-			fatalError("encoding of \(Self.self) is missing")
+			//fatalError("encoding of \(Self.self) is missing")
 		}
 	}
 	
@@ -1274,6 +1354,7 @@ extension AST {
 		//public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case elts
 			
 			case lineno
@@ -1299,7 +1380,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -1323,6 +1404,7 @@ extension AST {
 		//public var description: String
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case elts
 			case dims
 			
@@ -1349,7 +1431,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)

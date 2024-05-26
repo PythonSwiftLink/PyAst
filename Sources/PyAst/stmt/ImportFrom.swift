@@ -19,7 +19,7 @@ extension AST {
 	public struct ImportFrom: Stmt {
 		
 		
-		public var type: StmtType = .ClassDef
+		public var type: StmtType = .ImportFrom
 		
 		//public var description: String { "<\(Self.self)> \(name)" }
 		
@@ -54,6 +54,7 @@ extension AST {
 			//fatalError()
 		}
 		enum CodingKeys: CodingKey {
+			case __class__
 			case module
 			case names
 			case level
@@ -67,7 +68,17 @@ extension AST {
 		}
 		//
 		public func encode(to encoder: Encoder) throws {
-			fatalError()
+			var c = encoder.container(keyedBy: CodingKeys.self)
+			try c.encode(type, forKey: .__class__)
+			try c.encode(module, forKey: .module)
+			try c.encode(names, forKey: .names)
+			try c.encode(level, forKey: .level)
+			
+			try c.encode(lineno, forKey: .lineno)
+			try c.encode(col_offset, forKey: .col_offset)
+			try c.encode(end_lineno, forKey: .end_lineno)
+			try c.encode(end_col_offset, forKey: .end_col_offset)
+			try c.encode(type_comment, forKey: .type_comment)
 		}
 	}
 	

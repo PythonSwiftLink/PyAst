@@ -6,9 +6,11 @@ extension AST {
 	/*
 	 
 	 */
-	public struct Alias: AstProtocol {
-		public var name: String
-		public var asname: String?
+	public struct Comprehension: AstProtocol {
+		public var target: ExprProtocol
+		public var iter: ExprProtocol
+		public var ifs: [ExprProtocol]
+		public var is_async: Int
 		
 		public var lineno: Int
 		public var col_offset: Int
@@ -18,8 +20,11 @@ extension AST {
 		public let type_comment: String?
 		
 		enum CodingKeys: CodingKey {
-			case name
-			case asname
+			case __class__
+			case target
+			case iter
+			case ifs
+			case is_async
 			
 			case lineno
 			case col_offset
@@ -31,15 +36,14 @@ extension AST {
 		public init(from decoder: Decoder) throws {
 			let c: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)
 			
-			name = try c.decode(String.self, forKey: .name)
-			asname = try c.decodeIfPresent(String.self, forKey: .asname)
+			
 			
 			lineno = try c.decode(Int.self, forKey: .lineno)
 			col_offset = try c.decode(Int.self, forKey: .col_offset)
 			end_lineno = try c.decodeIfPresent(Int.self, forKey: .end_lineno)
 			end_col_offset = try c.decodeIfPresent(Int.self, forKey: .end_col_offset)
 			type_comment = try c.decodeIfPresent(String.self, forKey: .type_comment)
-			//fatalError("decoding of \(Self.self) is missing")
+			fatalError("decoding of \(Self.self) is missing")
 		}
 		
 		public func encode(to encoder: Encoder) throws {

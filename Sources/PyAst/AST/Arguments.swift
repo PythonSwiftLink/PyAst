@@ -22,6 +22,7 @@ extension AST {
 		//public var description: String { "\(args.map(\.description).joined(separator: ", "))" }
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			case args
 			case vararg
 			case kwonlyargs
@@ -53,14 +54,20 @@ extension AST {
 		}
 		
 		public func encode(to encoder: Encoder) throws {
-			
 			var container = encoder.container(keyedBy: CodingKeys.self)
+			//try container.encode(type, forKey: .__class__)
+			try container.encode(self.args, forKey: .args)
+			try container.encode(self.vararg, forKey: .vararg)
+			try container.encode(self.kwonlyargs, forKey: .kwonlyargs)
+			try container.encode(self.kw_defaults, forKey: .kw_defaults)
+			try container.encode(self.kwarg, forKey: .kwarg)
+			try container.encode(self.defaults, forKey: .defaults)
 			
 //			try container.encode(self.lineno, forKey: .lineno)
 //			try container.encode(self.end_lineno, forKey: .end_lineno)
 //			try container.encode(self.col_offset, forKey: .col_offset)
 //			try container.encode(self.end_col_offset, forKey: .end_col_offset)
-			fatalError("encoding of \(Self.self) is missing")
+//			try container.encode(type_comment, forKey: .type_comment)
 		}
 	}
 }

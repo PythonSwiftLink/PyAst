@@ -39,7 +39,7 @@ public extension AST {
 		public init(from decoder: Decoder) throws {
 			let c = try decoder.container(keyedBy: CodingKeys.self)
 			targets = try c.decode([ExprProtocol].self, forKey: .targets)
-			value = try try c.decode(ExprProtocol.self, forKey: .value)
+			value = try c.decode(ExprProtocol.self, forKey: .value)
 			
 			lineno = try c.decode(Int.self, forKey: .lineno)
 			col_offset = try c.decode(Int.self, forKey: .col_offset)
@@ -49,6 +49,7 @@ public extension AST {
 			//fatalError()
 		}
 		enum CodingKeys: CodingKey {
+			case __class__
 			case targets
 			case value
 			
@@ -60,7 +61,16 @@ public extension AST {
 		}
 		//
 		public func encode(to encoder: Encoder) throws {
-			fatalError()
+			var c = encoder.container(keyedBy: CodingKeys.self)
+			try c.encode(type, forKey: .__class__)
+			try c.encode(targets, forKey: .targets)
+			try c.encode(value, forKey: .value)
+
+			try c.encode(lineno, forKey: .lineno)
+			try c.encode(col_offset, forKey: .col_offset)
+			try c.encode(end_lineno, forKey: .end_lineno)
+			try c.encode(end_col_offset, forKey: .end_col_offset)
+			try c.encode(type_comment, forKey: .type_comment)
 		}
 	}
 	

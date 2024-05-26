@@ -15,6 +15,7 @@ public extension AST {
 		public let type_comment: String?
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			
 			case lineno
 			case col_offset
@@ -38,7 +39,7 @@ public extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
@@ -63,6 +64,7 @@ public extension AST {
 		
 		
 		enum CodingKeys: CodingKey {
+			case __class__
 			
 			case lineno
 			case col_offset
@@ -86,7 +88,7 @@ public extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)

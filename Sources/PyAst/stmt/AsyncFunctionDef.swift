@@ -8,26 +8,26 @@ extension AST {
 	 
 	 ```python
 	 class ClassDef(stmt):
-		 if sys.version_info >= (3, 12):
-			__match_args__ = ("name", "bases", "keywords", "body", "decorator_list", "type_params")
-		 elif sys.version_info >= (3, 10):
-			__match_args__ = ("name", "bases", "keywords", "body", "decorator_list")
-		 name: _Identifier
-		 bases: list[expr]
-		 keywords: list[keyword]
-		 body: list[stmt]
-		 decorator_list: list[expr]
-		 if sys.version_info >= (3, 12):
-			type_params: list[type_param]
+	 if sys.version_info >= (3, 12):
+	 __match_args__ = ("name", "bases", "keywords", "body", "decorator_list", "type_params")
+	 elif sys.version_info >= (3, 10):
+	 __match_args__ = ("name", "bases", "keywords", "body", "decorator_list")
+	 name: _Identifier
+	 bases: list[expr]
+	 keywords: list[keyword]
+	 body: list[stmt]
+	 decorator_list: list[expr]
+	 if sys.version_info >= (3, 12):
+	 type_params: list[type_param]
 	 ```
 	 */
 	
-	public struct ClassDef: Stmt {
+	public struct AsyncFunctionDef: Stmt {
 		
 		
-		public var type: StmtType = .ClassDef
+		public var type: StmtType = .AsyncFunctionDef
 		
-		public var description: String { "<\(Self.self)> \(name)" }
+		public var description: String { name }
 		
 		//var pyPointer: PyPointer
 		
@@ -36,27 +36,27 @@ extension AST {
 		
 		public var bases: [ExprProtocol]
 		
-		public var keywords: [Keyword]
-		
 		public var body: [Stmt]
 		
 		public var decorator_list: [ExprProtocol]
 		
+		public var returns: ExprProtocol?
+		
 		public var lineno: Int
 		public var col_offset: Int
 		
-		public var end_lineno: Int?
-		public var end_col_offset: Int?
-		public var type_comment: String?
+		public let end_lineno: Int?
+		public let end_col_offset: Int?
+		public let type_comment: String?
 		
 		
 		public init(from decoder: Decoder) throws {
 			let c = try decoder.container(keyedBy: CodingKeys.self)
 			name = try c.decode(String.self, forKey: .name)
 			bases = try c.decode([ExprProtocol].self, forKey: .bases)
-			keywords = try c.decode([Keyword].self, forKey: .keywords)
-			body = try c.decode([Stmt].self, forKey: .body)
-			decorator_list = try! c.decode([ExprProtocol].self, forKey: .decorator_list)
+			body = try c.decode([Stmt].self, forKey: .bases)
+			decorator_list = try c.decode([ExprProtocol].self, forKey: .decorator_list)
+			returns = try c.decodeIfPresent((any ExprProtocol).self, forKey: .returns)
 			
 			lineno = try c.decode(Int.self, forKey: .lineno)
 			col_offset = try c.decode(Int.self, forKey: .col_offset)
@@ -66,11 +66,12 @@ extension AST {
 			//fatalError()
 		}
 		enum CodingKeys: CodingKey {
+			case __class__
 			case name
 			case bases
-			case keywords
 			case body
 			case decorator_list
+			case returns
 			
 			case lineno
 			case col_offset

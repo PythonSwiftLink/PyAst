@@ -8,6 +8,7 @@ import PySwiftCore
 import PyDecode
 import PyEncode
 import PythonCore
+import PyAst
 
 extension PyPointer {
 	public var string: String { .init(cString: PyUnicode_AsUTF8(self)) }
@@ -96,14 +97,9 @@ extension AST {
 //	
 //}
 
-public protocol Stmt: AstProtocol {
-	var type: AST.StmtType { get }
-}
 
 
-public protocol ExprProtocol: AstProtocol {
-	var type: AST.ExprType { get }
-}
+
 
 
 public protocol PyAstObject: CustomStringConvertible, PyEncodable, Codable {

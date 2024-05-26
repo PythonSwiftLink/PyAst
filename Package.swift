@@ -42,6 +42,7 @@ let package = Package(
         .library(
             name: "PyAstParser",
             targets: ["PyAstParser"]),
+		.library(name: "PyAst", targets: ["PyAst"])
 //		.library(
 //			name: "PyAstBuilder",
 //			type: .static,
@@ -55,6 +56,7 @@ let package = Package(
         .target(
             name: "PyAstParser",
             dependencies: [
+				"PyAst",
 				.product(name: "PySwiftCore", package: psl_string),
 				.product(name: "PyEncode", package: psl_string),
 				.product(name: "PyDecode", package: psl_string),
@@ -63,7 +65,7 @@ let package = Package(
 				//.product(name: "SwiftSyntax", package: "swift-syntax"),
 				
 			]),
-		
+		.target(name: "PyAst")
 //		.target(
 //			name: "PyAstBuilder",
 //			dependencies: [

@@ -33,6 +33,7 @@ extension AST {
 		
 		public init(from decoder: Decoder) throws {
 			let c = try decoder.container(keyedBy: CodingKeys.self)
+			
 			name = try c.decode(String.self, forKey: .name)
 			args = try c.decode(Arguments.self, forKey: .args)
 			body = try c.decode([Stmt].self, forKey: .body)
@@ -47,6 +48,7 @@ extension AST {
 			//fatalError()
 		}
 		enum CodingKeys: CodingKey {
+			case __class__
 			case name
 			case args
 			case body
@@ -61,7 +63,19 @@ extension AST {
 		}
 		//
 		public func encode(to encoder: Encoder) throws {
-			fatalError()
+			var container = encoder.container(keyedBy: CodingKeys.self)
+			try container.encode(type, forKey: .__class__)
+			try container.encode(self.name, forKey: .name)
+			try container.encode(self.args, forKey: .args)
+			try container.encode(self.body, forKey: .body)
+			try container.encode(self.decorator_list, forKey: .decorator_list)
+			try container.encodeIfPresent(returns, forKey: .returns)
+			
+			try container.encode(self.lineno, forKey: .lineno)
+			try container.encode(self.end_lineno, forKey: .end_lineno)
+			try container.encode(self.col_offset, forKey: .col_offset)
+			try container.encode(self.end_col_offset, forKey: .end_col_offset)
+			try container.encode(type_comment, forKey: .type_comment)
 		}
 	}
 	

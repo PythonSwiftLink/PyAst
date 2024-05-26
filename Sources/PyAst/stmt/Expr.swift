@@ -1,13 +1,21 @@
+//
+//  File.swift
+//  
+//
+//  Created by CodeBuilder on 11/02/2024.
+//
 
 import Foundation
 
 
-extension AST {
-	/*
-	 
-	 */
-	public struct CmpOp: AstProtocol {
+public extension AST {
 	
+	struct Expr: Stmt {
+		
+		public var value: ExprProtocol
+		
+		public var type: AST.StmtType = .Expr
+		
 		public var lineno: Int
 		public var col_offset: Int
 		
@@ -15,8 +23,12 @@ extension AST {
 		public let end_col_offset: Int?
 		public let type_comment: String?
 		
+		//public var description: String { value.description }
+		
 		enum CodingKeys: CodingKey {
-	
+			case __class__
+			case value
+			
 			case lineno
 			case col_offset
 			case end_lineno
@@ -27,25 +39,27 @@ extension AST {
 		public init(from decoder: Decoder) throws {
 			let c: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)
 			
-			
+			value = try c.decode(ExprProtocol.self, forKey: .value)
 			
 			lineno = try c.decode(Int.self, forKey: .lineno)
 			col_offset = try c.decode(Int.self, forKey: .col_offset)
 			end_lineno = try c.decodeIfPresent(Int.self, forKey: .end_lineno)
 			end_col_offset = try c.decodeIfPresent(Int.self, forKey: .end_col_offset)
 			type_comment = try c.decodeIfPresent(String.self, forKey: .type_comment)
-			fatalError("decoding of \(Self.self) is missing")
+			//fatalError("decoding of \(Self.self) is missing")
 		}
 		
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			try container.encode(type, forKey: .__class__)
+			try container.encode(value, forKey: .value)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
 			try container.encode(self.end_col_offset, forKey: .end_col_offset)
-			fatalError("encoding of \(Self.self) is missing")
+			//fatalError("encoding of \(Self.self) is missing")
 		}
 	}
+
 }

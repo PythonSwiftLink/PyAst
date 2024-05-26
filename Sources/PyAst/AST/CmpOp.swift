@@ -6,12 +6,8 @@ extension AST {
 	/*
 	 
 	 */
-	public struct Comprehension: AstProtocol {
-		public var target: ExprProtocol
-		public var iter: ExprProtocol
-		public var ifs: [ExprProtocol]
-		public var is_async: Int
-		
+	public struct CmpOp: AstProtocol {
+	
 		public var lineno: Int
 		public var col_offset: Int
 		
@@ -20,11 +16,8 @@ extension AST {
 		public let type_comment: String?
 		
 		enum CodingKeys: CodingKey {
-			case target
-			case iter
-			case ifs
-			case is_async
-			
+			case __class__
+	
 			case lineno
 			case col_offset
 			case end_lineno
@@ -48,7 +41,7 @@ extension AST {
 		public func encode(to encoder: Encoder) throws {
 			
 			var container = encoder.container(keyedBy: CodingKeys.self)
-			
+			//try container.encode(ExprType.c, forKey: .type)
 			try container.encode(self.lineno, forKey: .lineno)
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
