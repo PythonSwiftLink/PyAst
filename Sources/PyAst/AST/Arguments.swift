@@ -5,6 +5,17 @@ import Foundation
 extension AST {
 
 	public struct Arguments: AstProtocol {
+		public init(args: [AST.Arg], vararg: AST.Arg? = nil, kwonlyargs: [AST.Arg], kw_defaults: [ExprProtocol], kwarg: AST.Arg? = nil, defaults: [ExprProtocol], lineno: Int = 0, col_offset: Int = 0) {
+			self.args = args
+			self.vararg = vararg
+			self.kwonlyargs = kwonlyargs
+			self.kw_defaults = kw_defaults
+			self.kwarg = kwarg
+			self.defaults = defaults
+			self.lineno = lineno
+			self.col_offset = col_offset
+		}
+		
 		public var args: [Arg]
 		public var vararg: Arg?
 		public var kwonlyargs: [Arg]
