@@ -53,7 +53,7 @@ public extension AST {
 			try container.encode(self.end_lineno, forKey: .end_lineno)
 			try container.encode(self.col_offset, forKey: .col_offset)
 			try container.encode(self.end_col_offset, forKey: .end_col_offset)
-			fatalError("encoding of \(Self.self) is missing")
+			//fatalError("encoding of \(Self.self) is missing")
 		}
 	}
 
