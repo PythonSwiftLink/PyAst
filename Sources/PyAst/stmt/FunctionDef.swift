@@ -4,6 +4,19 @@ extension AST {
 	
 	
 	public struct FunctionDef: Stmt {
+		public init( name: String, args: AST.Arguments, body: [Stmt], decorator_list: [ExprProtocol], returns: ExprProtocol? = nil, lineno: Int, col_offset: Int, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil) {
+			self.name = name
+			self.args = args
+			self.body = body
+			self.decorator_list = decorator_list
+			self.returns = returns
+			self.lineno = lineno
+			self.col_offset = col_offset
+			self.end_lineno = end_lineno
+			self.end_col_offset = end_col_offset
+			self.type_comment = type_comment
+		}
+		
 		
 		
 		public var type: StmtType = .FunctionDef
@@ -29,6 +42,7 @@ extension AST {
 		public var end_lineno: Int?
 		public var end_col_offset: Int?
 		public var type_comment: String?
+		
 		
 		
 		public init(from decoder: Decoder) throws {
