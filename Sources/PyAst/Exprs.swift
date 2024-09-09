@@ -854,6 +854,16 @@ extension AST {
 			try container.encode(self.end_col_offset, forKey: .end_col_offset)
 			//fatalError("encoding of \(Self.self) is missing")
 		}
+		
+		static func ==(l: Self, r: String) -> Bool {
+			switch l._func {
+			case let const as AST.Constant:
+				return const.value == r
+			case let name as AST.Name:
+				return name.id == r
+			default: fatalError()
+			}
+		}
 	}
 	
 	public struct FormattedValue: ExprProtocol {
@@ -1046,6 +1056,11 @@ extension AST {
 			guard let value = value else { return nil }
 			return Double(value)
 		}
+		
+		public static func ==(l: Self, r: String) -> Bool {
+			l.value == r
+		}
+
 	}
 	
 	public struct NamedExpr: ExprProtocol {
@@ -1358,6 +1373,10 @@ extension AST {
 			try container.encode(self.col_offset, forKey: .col_offset)
 			try container.encode(self.end_col_offset, forKey: .end_col_offset)
 			//fatalError("encoding of \(Self.self) is missing")
+		}
+		
+		public static func ==(l: Self, r: String) -> Bool {
+			l.id == r
 		}
 	}
 	
