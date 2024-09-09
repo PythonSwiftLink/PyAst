@@ -1057,8 +1057,17 @@ extension AST {
 			return Double(value)
 		}
 		
+		public var boolValue: Bool? {
+			guard let value = value else { return nil }
+			return Bool(value.lowercased())
+		}
+		
 		public static func ==(l: Self, r: String) -> Bool {
 			l.value == r
+		}
+		
+		public static func ==(l: Self, r: Bool) -> Bool {
+			l.boolValue == r
 		}
 
 	}
