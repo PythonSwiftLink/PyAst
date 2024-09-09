@@ -953,6 +953,8 @@ extension AST {
 	}
 	
 	public struct Constant: ExprProtocol {
+		
+		
 		public var type: AST.ExprType = .Constant
 		public var lineno: Int
 		public var col_offset: Int
@@ -980,6 +982,20 @@ extension AST {
 			case end_col_offset
 			case type_comment
 		}
+		
+		public init(type: AST.ExprType = .Constant, lineno: Int, col_offset: Int, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil, value: String? = nil, kind: String? = nil, s: Any? = nil, n: String) {
+			self.type = type
+			self.lineno = lineno
+			self.col_offset = col_offset
+			self.end_lineno = end_lineno
+			self.end_col_offset = end_col_offset
+			self.type_comment = type_comment
+			self.value = value
+			self.kind = kind
+			self.s = s
+			self.n = n
+		}
+		
 		
 		public init(from decoder: Decoder) throws {
 			let c: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)
