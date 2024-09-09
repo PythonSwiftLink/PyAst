@@ -23,6 +23,20 @@ extension AST {
 	 */
 	
 	public struct ClassDef: Stmt {
+		public init(type: AST.StmtType = .ClassDef, name: String, bases: [ExprProtocol], keywords: [AST.Keyword], body: [Stmt], decorator_list: [ExprProtocol], lineno: Int, col_offset: Int, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil) {
+			self.type = type
+			self.name = name
+			self.bases = bases
+			self.keywords = keywords
+			self.body = body
+			self.decorator_list = decorator_list
+			self.lineno = lineno
+			self.col_offset = col_offset
+			self.end_lineno = end_lineno
+			self.end_col_offset = end_col_offset
+			self.type_comment = type_comment
+		}
+		
 		
 		
 		public var type: StmtType = .ClassDef
