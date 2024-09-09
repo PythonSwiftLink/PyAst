@@ -3,6 +3,15 @@ import Foundation
 
 public extension AST {
 	struct Pass: Stmt {
+		public init(description: String = "\(Self.self)", lineno: Int = 0, col_offset: Int = 0, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil) {
+			self.description = description
+			self.lineno = lineno
+			self.col_offset = col_offset
+			self.end_lineno = end_lineno
+			self.end_col_offset = end_col_offset
+			self.type_comment = type_comment
+		}
+		
 		public let type: AST.StmtType = .Pass
 		
 		public var description: String = "\(Self.self)"
