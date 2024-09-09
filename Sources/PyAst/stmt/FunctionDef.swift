@@ -91,8 +91,12 @@ extension AST {
 			try container.encode(self.end_col_offset, forKey: .end_col_offset)
 			try container.encode(type_comment, forKey: .type_comment)
 		}
+		
+		public static func ==(l: Self, r: String) -> Bool {
+			l.name == r
+		}
+		
 	}
-	
 	
 	
 }
