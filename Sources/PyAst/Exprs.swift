@@ -952,7 +952,7 @@ extension AST {
 		}
 	}
 	
-	public struct Constant: ExprProtocol {
+	public struct Constant: ExprProtocol, ExpressibleByStringLiteral {
 		
 		
 		public var type: AST.ExprType = .Constant
@@ -968,7 +968,7 @@ extension AST {
 		public var s: Any?
 		public var n: String
 		
-		public var description: String { "( <\(Self.self)> \(value) )" }
+		public var description: String { "( <\(Self.self)> \(value ?? "") )" }
 		
 		enum CodingKeys: CodingKey {
 			case __class__
@@ -982,7 +982,12 @@ extension AST {
 			case end_col_offset
 			case type_comment
 		}
-		
+		public init(stringLiteral value: StringLiteralType) {
+			self.value = value
+			n = value
+			lineno = 0
+			col_offset = 0
+		}
 		public init(type: AST.ExprType = .Constant, lineno: Int, col_offset: Int, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil, value: String? = nil, kind: String? = nil, s: Any? = nil, n: String) {
 			self.type = type
 			self.lineno = lineno
