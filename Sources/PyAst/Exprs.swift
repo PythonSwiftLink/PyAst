@@ -855,7 +855,7 @@ extension AST {
 			//fatalError("encoding of \(Self.self) is missing")
 		}
 		
-		static func ==(l: Self, r: String) -> Bool {
+		public static func ==(l: Self, r: String) -> Bool {
 			switch l._func {
 			case let const as AST.Constant:
 				return const.value == r
