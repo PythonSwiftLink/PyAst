@@ -10,6 +10,8 @@ public protocol AstProtocol: Codable {
 	var end_lineno: Int? { get }
 	var end_col_offset: Int? { get }
 	var type_comment: String? { get }
+	
+	var name: String { get }
 }
 
 

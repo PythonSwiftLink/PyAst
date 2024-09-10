@@ -11,7 +11,7 @@ public extension AST {
 	 ```
 	 */
 	
-	public struct Assign: Stmt {
+	struct Assign: Stmt {
 		
 		
 		public var type: StmtType = .Assign
@@ -35,6 +35,7 @@ public extension AST {
 		public var end_col_offset: Int?
 		public var type_comment: String?
 		
+		public var name: String { targets.first?.name ?? "" }
 		
 		public init(from decoder: Decoder) throws {
 			let c = try decoder.container(keyedBy: CodingKeys.self)

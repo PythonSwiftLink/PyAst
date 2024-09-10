@@ -23,6 +23,7 @@ public extension AST {
 		public let end_col_offset: Int?
 		public let type_comment: String?
 		
+		public var name: String { value.name }
 		//public var description: String { value.description }
 		
 		enum CodingKeys: CodingKey {

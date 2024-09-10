@@ -29,7 +29,9 @@ extension AST {
 			self.type_comment = type_comment
 		}
 		
-		
+		public var name: String {
+			module ?? names.first?.name ?? "import error"
+		}
 		
 		public var type: StmtType = .ImportFrom
 		

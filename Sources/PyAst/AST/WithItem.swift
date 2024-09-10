@@ -6,7 +6,7 @@ extension AST {
 	/*
 	 
 	 */
-	public struct WithItem: AstProtocol {
+	struct WithItem: AstProtocol {
 		public var context_expr: ExprProtocol
 		public var optional_vars: ExprProtocol?
 		
@@ -28,6 +28,8 @@ extension AST {
 			case end_col_offset
 			case type_comment
 		}
+		
+		public var name: String { context_expr.name }
 		
 		public init(from decoder: Decoder) throws {
 			let c: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)

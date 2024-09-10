@@ -23,6 +23,8 @@ public extension AST {
 		public let end_col_offset: Int?
 		public let type_comment: String?
 		
+		public var name: String { "pass" }
+		
 		enum CodingKeys: CodingKey {
 			case __class__
 			
@@ -70,6 +72,8 @@ public extension AST {
 		public let end_lineno: Int?
 		public let end_col_offset: Int?
 		public let type_comment: String?
+		
+		public var name: String { description }
 		
 		
 		enum CodingKeys: CodingKey {

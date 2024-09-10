@@ -20,6 +20,8 @@ extension AST {
 		public let end_col_offset: Int?
 		public let type_comment: String?
 		
+		public var name: String { arg }
+		
 		//public var description: String { "\(arg): \(annotation?.description ?? "object")"}
 		enum CodingKeys: CodingKey {
 			case __class__

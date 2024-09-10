@@ -43,6 +43,10 @@ func type2Op(_ t: AST.Operator.OperatorType) -> AstOperator.Type {
 	
 }
 
+extension AstOperator {
+	public var name: String { "?" }
+}
+
 extension AST {
 	
 	
@@ -84,6 +88,8 @@ extension AST {
 			
 			var type_comment: String?
 			
+			public var name: String { "+" }
+			
 		}
 		
 		struct BitAnd: AstOperator {
@@ -99,6 +105,8 @@ extension AST {
 			
 			var type_comment: String?
 			
+			public var name: String { "&" }
+			
 		}
 		
 		struct BitOr: AstOperator {
@@ -113,6 +121,8 @@ extension AST {
 			var end_col_offset: Int?
 			
 			var type_comment: String?
+			
+			public var name: String { "|" }
 			
 			enum CodingKeys: CodingKey {
 				case __class__
@@ -159,6 +169,8 @@ extension AST {
 			var end_col_offset: Int?
 			
 			var type_comment: String?
+			
+			public var name: String { "?" }
 			
 		}
 		

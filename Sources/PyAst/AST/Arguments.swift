@@ -30,6 +30,7 @@ extension AST {
 		public let end_col_offset: Int? = nil
 		public let type_comment: String? = nil
 		
+		public var name: String { "?" }
 		//public var description: String { "\(args.map(\.description).joined(separator: ", "))" }
 		
 		enum CodingKeys: CodingKey {

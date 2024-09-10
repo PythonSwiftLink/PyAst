@@ -15,6 +15,8 @@ extension AST {
 		public let end_col_offset: Int?
 		public let type_comment: String?
 		
+		public var name: String { fatalError() }
+		
 		enum CodingKeys: CodingKey {
 			case __class__
 	

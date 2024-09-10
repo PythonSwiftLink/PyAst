@@ -19,6 +19,10 @@ public protocol ExprProtocol: AstProtocol, Codable {
 	var type: AST.ExprType { get }
 }
 
+extension ExprProtocol {
+	public var name: String { fatalError() }
+}
+
 
 
 public struct AST {

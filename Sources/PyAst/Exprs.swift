@@ -666,6 +666,8 @@ extension AST {
 		
 		public var description: String
 		
+		public var name: String { "?" }
+		
 		enum CodingKeys: CodingKey {
 			case __class__
 			case arg
@@ -712,6 +714,8 @@ extension AST {
 		public var value: ExprProtocol
 		
 		public var description: String
+		
+		public var name: String { "?" }
 		
 		enum CodingKeys: CodingKey {
 			case __class__
@@ -762,6 +766,8 @@ extension AST {
 		
 		public var description: String
 		
+		public var name: String { "?" }
+		
 		enum CodingKeys: CodingKey {
 			case __class__
 			case arg
@@ -810,6 +816,7 @@ extension AST {
 		public var args: [ExprProtocol]
 		public var keywords: [Keyword]
 		
+		public var name: String { _func.name }
 		//public var description: String
 		
 		enum CodingKeys: String, CodingKey {
@@ -880,6 +887,8 @@ extension AST {
 		
 		public var description: String
 		
+		public var name: String { "?" }
+		
 		enum CodingKeys: CodingKey {
 			case __class__
 			case arg
@@ -926,6 +935,8 @@ extension AST {
 		public var values: [ExprProtocol]
 		
 		public var description: String
+		
+		public var name: String { "?" }
 		
 		enum CodingKeys: CodingKey {
 			case __class__
@@ -977,6 +988,8 @@ extension AST {
 		public var kind: String?
 		public var s: Any?
 		public var n: String
+		
+		public var name: String { value ?? n }
 		
 		public var description: String { "( <\(Self.self)> \(value ?? "") )" }
 		
@@ -1085,6 +1098,8 @@ extension AST {
 		
 		public var description: String
 		
+		public var name: String { target.name }
+		
 		enum CodingKeys: CodingKey {
 			case __class__
 			case arg
@@ -1134,6 +1149,8 @@ extension AST {
 		
 		public var description: String
 		
+		public var name: String { attr }
+		
 		enum CodingKeys: CodingKey {
 			case __class__
 			case arg
@@ -1182,6 +1199,8 @@ extension AST {
 		public var step: ExprProtocol?
 		
 		public var description: String { "(\(Self.self) lower: \(lower), upper: \(upper), step: \(step)"}
+		
+		public var name: String { "Slice" }
 		
 		enum CodingKeys: CodingKey {
 			case __class__
@@ -1239,6 +1258,8 @@ extension AST {
 		
 		public var description: String { "(\(Self.self) value: \(value), slice: \(slice)"}
 		
+		public var name: String { value.name }
+		
 		enum CodingKeys: CodingKey {
 			case __class__
 			case value
@@ -1290,6 +1311,8 @@ extension AST {
 		public var value: ExprProtocol
 		// var ctx: ExprContext
 		public var description: String
+		
+		public var name: String { value.name }
 		
 		enum CodingKeys: CodingKey {
 			case __class__
@@ -1347,6 +1370,8 @@ extension AST {
 		public var id: String
 		// var ctx: ExprContext
 		
+		public var name: String { id }
+		
 		public var description: String { id }
 		
 		enum CodingKeys: CodingKey {
@@ -1401,6 +1426,8 @@ extension AST {
 		// var ctx: ExprContext
 		
 		//public var description: String
+		
+		
 		
 		enum CodingKeys: CodingKey {
 			case __class__

@@ -17,7 +17,7 @@ public extension AST {
 	 ```
 	 */
 	
-	public struct AnnAssign: Stmt {
+	struct AnnAssign: Stmt {
 		public init(type: AST.StmtType = .AnnAssign, target: ExprProtocol, annotation: ExprProtocol, value: ExprProtocol? = nil, simple: Int, lineno: Int, col_offset: Int, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil) {
 			self.type = type
 			self.target = target
@@ -57,6 +57,8 @@ public extension AST {
 		public var end_col_offset: Int?
 		public var type_comment: String?
 		
+		
+		public var name: String { target.name }
 		
 		public init(from decoder: Decoder) throws {
 			let c = try decoder.container(keyedBy: CodingKeys.self)
