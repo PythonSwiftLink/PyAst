@@ -7,7 +7,7 @@ let development = true
 let local = false
 
 var psl_string: String {
-	if development { return "PythonSwiftLink-development" }
+	//if development { return "PythonSwiftLink-development" }
 	return "PythonSwiftLink"
 }
 
