@@ -13,7 +13,7 @@ var psl_string: String {
 
 var packages: [Package.Dependency] = [
 	//.package(path: "../PyCodable"),
-	.package(url: "https://github.com/PythonSwiftLink/PyCodable", branch: "master")
+	.package(url: "https://github.com/PythonSwiftLink/PyCodable", from: .init(0, 0, 0))
 	//.package(path: "../PythonTestSuite")
 ]
 if local {
