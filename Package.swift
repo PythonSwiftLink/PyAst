@@ -3,7 +3,7 @@
 
 import PackageDescription
 
-let development = true
+let development = false
 let local = false
 
 var psl_string: String {
