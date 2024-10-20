@@ -6,7 +6,7 @@ extension AST {
 	/*
 	 
 	 */
-	public struct Alias: AstProtocol {
+	public struct Alias: AstProtocol, ExpressibleByStringLiteral {
 		
 		public var name: String
 		public var asname: String?
@@ -28,6 +28,16 @@ extension AST {
 			case end_lineno
 			case end_col_offset
 			case type_comment
+		}
+		
+		public init(stringLiteral value: StringLiteralType) {
+			name = value
+			asname = nil
+			lineno = 0
+			col_offset = 0
+			end_lineno = nil
+			end_col_offset = nil
+			type_comment = nil
 		}
 		
 		public init(from decoder: Decoder) throws {
@@ -60,3 +70,6 @@ extension AST {
 		}
 	}
 }
+
+
+

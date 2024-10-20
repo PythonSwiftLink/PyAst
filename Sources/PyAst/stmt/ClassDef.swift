@@ -118,3 +118,9 @@ extension AST {
 	
 }
 
+//import PySwiftCore
+//import PyEncode
+//
+//extension AST.ClassDef: PyEncodable {
+//	var pyPointer: PyPointer
+//}
