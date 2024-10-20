@@ -247,10 +247,7 @@ public func handlePyAst(_ v: PythonObject) -> PyAstObject? {
 		return PyAst_Pass(obj)
 	
     default:
-        print()
-        pyPrint(v.ptr ?? .None)
-        v.print_dict()
-        //fatalError()
+
 		return nil
     }
 }

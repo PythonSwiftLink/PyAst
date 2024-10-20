@@ -31,7 +31,6 @@ public class PyAst_Class: PyAstObject {
     
     public required init(_ v: PythonObject) {
         name = .init(object: v.name) ?? "None"
-		v.print_dict()
         body = v.body.compactMap(handlePyAst)
         decorator_list = v.decorator_list.compactMap(handlePyAst)
         bases = v.bases.compactMap(handlePyAst)

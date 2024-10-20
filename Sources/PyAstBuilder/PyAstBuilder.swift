@@ -61,7 +61,6 @@ private enum SwiftTypes: String {
 	case Array
 }
 func swiftToPyType(swiftType: String?) -> String {
-	print(swiftType)
 	if let swiftType = swiftType, let t = SwiftTypes(rawValue: swiftType.trimmingCharacters(in: .whitespaces)) {
 		
 		switch t {
@@ -109,11 +108,7 @@ public func parseToAstModule(statements: CodeBlockItemListSyntax) {
 		if let _cls_ = item.as(ClassDeclSyntax.self) {
 			
 			let ast_cls = PyAst_Class(syntax: _cls_).pyPointer
-			
-			print("\n###################################\n")
-			print( try! astorToSource(ast_cls) as String )
-			print("\n###################################\n")
-			
+	
 		} else if let _enum_ = item.as(EnumDeclSyntax.self) {
 			print("\(EnumDeclSyntax.self): \(_enum_.name.text)")
 		}

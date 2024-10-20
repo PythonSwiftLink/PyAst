@@ -35,10 +35,7 @@ public class PyAst_Constant: PyAstObject {
 		case pyNone_Type:
 			value = "None"
 		default:
-			pyPrint(_value.pyPointer)
-			pyPrint(PyObject_Type(_value.pyPointer))
-			print(PyObject_TypeCheck(_value, pyBool_Type) as Int32, PyBool_Check(_value))
-			
+	
 			value = "nil"
 		}
 //        switch _value {

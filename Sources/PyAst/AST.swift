@@ -399,9 +399,7 @@ extension KeyedDecodingContainer {
 	
 	public func decode(_ type: [Stmt].Type, forKey key: KeyedDecodingContainer<K>.Key) throws -> [Stmt] {
 		var c = try nestedUnkeyedContainer(forKey: key)
-		//print(self,"decode(_ type: [Stmt].Type, forKey key: \(key))")
-		//print(try! decode([AST.__class__].self, forKey: key).map(\.__name__))
-		
+
 		var types = try! decode([AST.StmtType].self, forKey: key)
 		var out = [Stmt]()
 		for t in types {

@@ -24,17 +24,9 @@ public class PyAst_AnnAssign: PyAstObject {
 	public var annotation: PyAst_Annotation
 	
 	required public init(_ v: PythonSwiftCore.PythonObject) {
-		v.print_dict()
-		
-		
+
 		target = .init(v.target)
 		annotation = .init(v.annotation)
-
-		
-		//print(self)
-		//v.print_dict()
-		
-		
 	}
 	
 	public var pyObject: PythonSwiftCore.PythonObject {
