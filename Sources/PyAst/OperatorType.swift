@@ -109,7 +109,7 @@ extension AST {
 			
 		}
 		
-		struct BitOr: AstOperator {
+		public struct BitOr: AstOperator {
 			public init(lineno: Int = 0, col_offset: Int = 0, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil) {
 				self.lineno = lineno
 				self.col_offset = col_offset
@@ -141,7 +141,7 @@ extension AST {
 				case type_comment
 			}
 			
-			init(from decoder: Decoder) throws {
+			public init(from decoder: Decoder) throws {
 				let container: KeyedDecodingContainer<AST.Operator.BitOr.CodingKeys> = try decoder.container(keyedBy: AST.Operator.BitOr.CodingKeys.self)
 				
 				self.lineno = 0//try container.decode(Int.self, forKey: AST.Operator.BitOr.CodingKeys.lineno)
@@ -152,7 +152,7 @@ extension AST {
 				
 			}
 			
-			func encode(to encoder: Encoder) throws {
+			public func encode(to encoder: Encoder) throws {
 				var container: KeyedEncodingContainer<AST.Operator.BitOr.CodingKeys> = encoder.container(keyedBy: AST.Operator.BitOr.CodingKeys.self)
 				
 				try container.encode(self.__class__, forKey: AST.Operator.BitOr.CodingKeys.__class__)
