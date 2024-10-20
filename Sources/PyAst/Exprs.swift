@@ -804,6 +804,18 @@ extension AST {
 	}
 	
 	public struct Call: ExprProtocol {
+		public init(type: AST.ExprType = .Call, lineno: Int = 0, col_offset: Int = 0, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil, _func: ExprProtocol, args: [ExprProtocol], keywords: [AST.Keyword]) {
+			self.type = type
+			self.lineno = lineno
+			self.col_offset = col_offset
+			self.end_lineno = end_lineno
+			self.end_col_offset = end_col_offset
+			self.type_comment = type_comment
+			self._func = _func
+			self.args = args
+			self.keywords = keywords
+		}
+		
 		public var type: AST.ExprType = .Call
 		
 		public var lineno: Int
