@@ -13,7 +13,6 @@ public extension AST {
 	
 	struct Assign: Stmt {
 		
-		
 		public var type: StmtType = .Assign
 		
 		//public var description: String { "(<\(Self.self)> \(target): \(annotation))" }
@@ -37,6 +36,19 @@ public extension AST {
 		
 		public var name: String { targets.first?.name ?? "" }
 		
+		public init(type: AST.StmtType = .Assign, targets: [ExprProtocol], value: ExprProtocol, lineno: Int, col_offset: Int, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil) {
+			self.type = type
+			self.targets = targets
+			self.value = value
+			self.lineno = lineno
+			self.col_offset = col_offset
+			self.end_lineno = end_lineno
+			self.end_col_offset = end_col_offset
+			self.type_comment = type_comment
+		}
+		
+		
+		
 		public init(from decoder: Decoder) throws {
 			let c = try decoder.container(keyedBy: CodingKeys.self)
 			targets = try c.decode([ExprProtocol].self, forKey: .targets)
@@ -49,6 +61,8 @@ public extension AST {
 			type_comment = try c.decodeIfPresent(String.self, forKey: .type_comment)
 			//fatalError()
 		}
+		
+		
 		enum CodingKeys: CodingKey {
 			case __class__
 			case targets
