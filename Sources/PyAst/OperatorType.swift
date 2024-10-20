@@ -75,52 +75,60 @@ extension AST {
 			
 		}
 		
-		struct Add: AstOperator {
-			let __class__: OperatorType = .Add
+		public struct Add: AstOperator {
+			public let __class__: OperatorType = .Add
 			
-			var lineno: Int
+			public var lineno: Int
 			
-			var col_offset: Int
+			public var col_offset: Int
 			
-			var end_lineno: Int?
+			public var end_lineno: Int?
 			
-			var end_col_offset: Int?
+			public var end_col_offset: Int?
 			
-			var type_comment: String?
+			public var type_comment: String?
 			
 			public var name: String { "+" }
 			
 		}
 		
 		struct BitAnd: AstOperator {
-			let __class__: OperatorType = .BitAnd
+			public let __class__: OperatorType = .BitAnd
 			
-			var lineno: Int
+			public var lineno: Int
 			
-			var col_offset: Int
+			public var col_offset: Int
 			
-			var end_lineno: Int?
+			public var end_lineno: Int?
 			
-			var end_col_offset: Int?
+			public var end_col_offset: Int?
 			
-			var type_comment: String?
+			public var type_comment: String?
 			
 			public var name: String { "&" }
 			
 		}
 		
 		struct BitOr: AstOperator {
-			let __class__: OperatorType = .BitOr
+			public init(lineno: Int = 0, col_offset: Int = 0, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil) {
+				self.lineno = lineno
+				self.col_offset = col_offset
+				self.end_lineno = end_lineno
+				self.end_col_offset = end_col_offset
+				self.type_comment = type_comment
+			}
 			
-			var lineno: Int
+			public let __class__: OperatorType = .BitOr
 			
-			var col_offset: Int
+			public var lineno: Int
 			
-			var end_lineno: Int?
+			public var col_offset: Int
 			
-			var end_col_offset: Int?
+			public var end_lineno: Int?
 			
-			var type_comment: String?
+			public var end_col_offset: Int?
+			
+			public var type_comment: String?
 			
 			public var name: String { "|" }
 			
@@ -157,155 +165,155 @@ extension AST {
 			
 		}
 		
-		struct BitXor: AstOperator {
-			let __class__: OperatorType = .BitXor
+		public struct BitXor: AstOperator {
+			public var __class__: OperatorType = .BitXor
 			
-			var lineno: Int
+			public var lineno: Int
 			
-			var col_offset: Int
+			public var col_offset: Int
 			
-			var end_lineno: Int?
+			public var end_lineno: Int?
 			
-			var end_col_offset: Int?
+			public var end_col_offset: Int?
 			
-			var type_comment: String?
+			public var type_comment: String?
 			
 			public var name: String { "?" }
 			
 		}
 		
-		struct Div: AstOperator {
-			let __class__: OperatorType = .Add
+		public struct Div: AstOperator {
+			public var __class__: OperatorType = .Add
 			
-			var lineno: Int
+			public var lineno: Int
 			
-			var col_offset: Int
+			public var col_offset: Int
 			
-			var end_lineno: Int?
+			public var end_lineno: Int?
 			
-			var end_col_offset: Int?
+			public var end_col_offset: Int?
 			
-			var type_comment: String?
-			
-		}
-		
-		struct FloorDiv: AstOperator {
-			let __class__: OperatorType = .FloorDiv
-			
-			var lineno: Int
-			
-			var col_offset: Int
-			
-			var end_lineno: Int?
-			
-			var end_col_offset: Int?
-			
-			var type_comment: String?
+			public var type_comment: String?
 			
 		}
 		
-		struct LShift: AstOperator {
-			let __class__: OperatorType = .LShift
+		public struct FloorDiv: AstOperator {
+			public var __class__: OperatorType = .FloorDiv
 			
-			var lineno: Int
+			public var lineno: Int
 			
-			var col_offset: Int
+			public var col_offset: Int
 			
-			var end_lineno: Int?
+			public var end_lineno: Int?
 			
-			var end_col_offset: Int?
+			public var end_col_offset: Int?
 			
-			var type_comment: String?
-			
-		}
-		
-		struct Mod: AstOperator {
-			let __class__: OperatorType = .Mod
-			
-			var lineno: Int
-			
-			var col_offset: Int
-			
-			var end_lineno: Int?
-			
-			var end_col_offset: Int?
-			
-			var type_comment: String?
+			public var type_comment: String?
 			
 		}
 		
-		struct Mult: AstOperator {
-			let __class__: OperatorType = .Mult
+		public struct LShift: AstOperator {
+			public let __class__: OperatorType = .LShift
 			
-			var lineno: Int
+			public var lineno: Int
 			
-			var col_offset: Int
+			public var col_offset: Int
 			
-			var end_lineno: Int?
+			public var end_lineno: Int?
 			
-			var end_col_offset: Int?
+			public var end_col_offset: Int?
 			
-			var type_comment: String?
-			
-		}
-		
-		struct MatMult: AstOperator {
-			let __class__: OperatorType = .MatMult
-			
-			var lineno: Int
-			
-			var col_offset: Int
-			
-			var end_lineno: Int?
-			
-			var end_col_offset: Int?
-			
-			var type_comment: String?
+			public var type_comment: String?
 			
 		}
 		
-		struct Pow: AstOperator {
-			let __class__: OperatorType = .Pow
+		public struct Mod: AstOperator {
+			public let __class__: OperatorType = .Mod
 			
-			var lineno: Int
+			public var lineno: Int
 			
-			var col_offset: Int
+			public var col_offset: Int
 			
-			var end_lineno: Int?
+			public var end_lineno: Int?
 			
-			var end_col_offset: Int?
+			public var end_col_offset: Int?
 			
-			var type_comment: String?
-			
-		}
-		
-		struct RShift: AstOperator {
-			let __class__: OperatorType = .RShift
-			
-			var lineno: Int
-			
-			var col_offset: Int
-			
-			var end_lineno: Int?
-			
-			var end_col_offset: Int?
-			
-			var type_comment: String?
+			public var type_comment: String?
 			
 		}
 		
-		struct Sub: AstOperator {
-			let __class__: OperatorType = .Sub
+		public struct Mult: AstOperator {
+			public let __class__: OperatorType = .Mult
 			
-			var lineno: Int
+			public var lineno: Int
 			
-			var col_offset: Int
+			public var col_offset: Int
 			
-			var end_lineno: Int?
+			public var end_lineno: Int?
 			
-			var end_col_offset: Int?
+			public var end_col_offset: Int?
 			
-			var type_comment: String?
+			public var type_comment: String?
+			
+		}
+		
+		public struct MatMult: AstOperator {
+			public let __class__: OperatorType = .MatMult
+			
+			public var lineno: Int
+			
+			public var col_offset: Int
+			
+			public var end_lineno: Int?
+			
+			public var end_col_offset: Int?
+			
+			public var type_comment: String?
+			
+		}
+		
+		public struct Pow: AstOperator {
+			public let __class__: OperatorType = .Pow
+			
+			public var lineno: Int
+			
+			public var col_offset: Int
+			
+			public var end_lineno: Int?
+			
+			public var end_col_offset: Int?
+			
+			public var type_comment: String?
+			
+		}
+		
+		public struct RShift: AstOperator {
+			public let __class__: OperatorType = .RShift
+			
+			public var lineno: Int
+			
+			public var col_offset: Int
+			
+			public var end_lineno: Int?
+			
+			public var end_col_offset: Int?
+			
+			public var type_comment: String?
+			
+		}
+		
+		public struct Sub: AstOperator {
+			public let __class__: OperatorType = .Sub
+			
+			public var lineno: Int
+			
+			public var col_offset: Int
+			
+			public var end_lineno: Int?
+			
+			public var end_col_offset: Int?
+			
+			public var type_comment: String?
 			
 		}
 		
