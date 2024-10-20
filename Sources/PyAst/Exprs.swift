@@ -1148,6 +1148,18 @@ extension AST {
 	}
 	
 	public struct Attribute: ExprProtocol {
+		public init(type: AST.ExprType = .Attribute, lineno: Int = 0, col_offset: Int = 0, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil, value: ExprProtocol, attr: String, description: String) {
+			self.type = type
+			self.lineno = lineno
+			self.col_offset = col_offset
+			self.end_lineno = end_lineno
+			self.end_col_offset = end_col_offset
+			self.type_comment = type_comment
+			self.value = value
+			self.attr = attr
+			self.description = description
+		}
+		
 		public var type: AST.ExprType = .Attribute
 		public var lineno: Int
 		public var col_offset: Int

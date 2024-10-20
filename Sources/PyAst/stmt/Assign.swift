@@ -36,7 +36,7 @@ public extension AST {
 		
 		public var name: String { targets.first?.name ?? "" }
 		
-		public init(type: AST.StmtType = .Assign, targets: [ExprProtocol], value: ExprProtocol, lineno: Int, col_offset: Int, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil) {
+		public init(type: AST.StmtType = .Assign, targets: [ExprProtocol], value: ExprProtocol, lineno: Int = 0, col_offset: Int = 0, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil) {
 			self.type = type
 			self.targets = targets
 			self.value = value
