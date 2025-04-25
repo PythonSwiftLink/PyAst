@@ -8,7 +8,7 @@ let local = false
 
 var psl_string: String {
 	//if development { return "PythonSwiftLink-development" }
-	return "PythonSwiftLink"
+	return "PySwiftKit"
 }
 
 var packages: [Package.Dependency] = [
