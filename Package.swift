@@ -58,8 +58,8 @@ let package = Package(
             dependencies: [
 				"PyAst",
 				.product(name: "PySwiftCore", package: psl_string),
-				.product(name: "PyEncode", package: psl_string),
-				.product(name: "PyDecode", package: psl_string),
+				.product(name: "PySerializing", package: psl_string),
+				.product(name: "PyDeserializing", package: psl_string),
 				.product(name: "PyCollection", package: psl_string),
 				.product(name: "PyCodable", package: "PyCodable")
 				//.product(name: "SwiftSyntax", package: "swift-syntax"),

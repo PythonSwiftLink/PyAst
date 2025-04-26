@@ -5,8 +5,8 @@
 import Foundation
 //import PythonLib
 import PySwiftCore
-import PyDecode
-import PyEncode
+import PySerializing
+import PyDeserializing
 import PythonCore
 import PyAst
 
@@ -102,7 +102,7 @@ extension AST {
 
 
 
-public protocol PyAstObject: CustomStringConvertible, PyEncodable, Codable {
+public protocol PyAstObject: CustomStringConvertible, PySerialize, Codable {
 	
 	var name: String { get }
 	
