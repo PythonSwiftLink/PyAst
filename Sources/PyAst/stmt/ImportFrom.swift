@@ -17,7 +17,7 @@ extension AST {
 	 */
 	
 	public struct ImportFrom: Stmt {
-		public init(type: AST.StmtType = .ImportFrom, module: String? = nil, names: [AST.Alias], level: Int, lineno: Int, col_offset: Int, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil) {
+		public init(type: AST.StmtType = .ImportFrom, module: String? = nil, names: [AST.Alias], level: Int = 1, lineno: Int = -1, col_offset: Int = -1, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil) {
 			self.type = type
 			self.module = module
 			self.names = names

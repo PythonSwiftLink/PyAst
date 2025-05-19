@@ -106,7 +106,20 @@ extension AST {
 		}
 	}
 	
-	public struct BinOp: ExprProtocol {
+    public struct BinOp: ExprProtocol {
+        public init(left: any ExprProtocol, op: any AstOperator, right: any ExprProtocol) {
+            self.left = left
+            self.op = op
+            self.right = right
+            
+            self.lineno = -1
+            self.col_offset = -1
+            self.end_lineno = nil
+            self.end_col_offset = nil
+            self.type_comment = nil
+            
+        }
+        
 		public var lineno: Int
 		public var col_offset: Int
 		public var end_lineno: Int?
@@ -114,7 +127,7 @@ extension AST {
 		public var type_comment: String?
 		
 		public var left: ExprProtocol
-		var op: any AstOperator
+		public var op: any AstOperator
 		public var right: ExprProtocol
 		
 		//public var description: String
@@ -1023,7 +1036,7 @@ extension AST {
 			lineno = 0
 			col_offset = 0
 		}
-		public init(type: AST.ExprType = .Constant, lineno: Int, col_offset: Int, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil, value: String? = nil, kind: String? = nil, s: Any? = nil, n: String) {
+		public init(type: AST.ExprType = .Constant, lineno: Int = -1, col_offset: Int = -1, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil, value: String? = nil, kind: String? = nil, s: Any? = nil, n: String) {
 			self.type = type
 			self.lineno = lineno
 			self.col_offset = col_offset
@@ -1210,7 +1223,19 @@ extension AST {
 		}
 	}
 	
-	public struct Slice: ExprProtocol {
+    public struct Slice: ExprProtocol {
+        public init(lower: (any ExprProtocol)? = nil, upper: (any ExprProtocol)? = nil, step: (any ExprProtocol)? = nil,
+            lineno: Int = -1, col_offset: Int = -1, end_lineno: Int? = nil, end_col_offset: Int? = nil, type_comment: String? = nil) {
+            self.lineno = lineno
+            self.col_offset = col_offset
+            self.end_lineno = end_lineno
+            self.end_col_offset = end_col_offset
+            self.type_comment = type_comment
+            self.lower = lower
+            self.upper = upper
+            self.step = step
+        }
+        
 		public var type: AST.ExprType = .Slice
 		public var lineno: Int
 		public var col_offset: Int
@@ -1238,6 +1263,8 @@ extension AST {
 			case end_col_offset
 			case type_comment
 		}
+        
+        
 		
 		public init(from decoder: Decoder) throws {
 			let c: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)
@@ -1268,7 +1295,17 @@ extension AST {
 	
 	
 	
-	public struct Subscript: ExprProtocol {
+    public struct Subscript: ExprProtocol {
+        public init(value: any ExprProtocol, slice: any ExprProtocol) {
+            self.lineno = -1
+            self.col_offset = -1
+            self.end_lineno = nil
+            self.end_col_offset = nil
+            self.type_comment = nil
+            self.value = value
+            self.slice = slice
+        }
+        
 		public var type: AST.ExprType = .Subscript
 		public var lineno: Int
 		public var col_offset: Int
@@ -1451,7 +1488,14 @@ extension AST {
 		
 		//public var description: String
 		
-		
+        public init(elts: [any ExprProtocol]) {
+            self.lineno = -1
+            self.col_offset = -1
+            self.end_lineno = nil
+            self.end_col_offset = nil
+            self.type_comment = nil
+            self.elts = elts
+        }
 		
 		enum CodingKeys: CodingKey {
 			case __class__
@@ -1489,7 +1533,9 @@ extension AST {
 		}
 	}
 	
-	public struct Tuple: ExprProtocol {
+    public struct Tuple: ExprProtocol {
+        
+        
 		public var type: AST.ExprType = .Tuple
 		public var lineno: Int
 		public var col_offset: Int
@@ -1502,7 +1548,16 @@ extension AST {
 		public var dims: [ExprProtocol]?
 		
 		//public var description: String
-		
+        public init(elts: [any ExprProtocol], dims: [any ExprProtocol]? = nil) {
+            self.lineno = -1
+            self.col_offset = -1
+            self.end_lineno = nil
+            self.end_col_offset = nil
+            self.type_comment = nil
+            self.elts = elts
+            self.dims = dims
+        }
+        
 		enum CodingKeys: CodingKey {
 			case __class__
 			case elts

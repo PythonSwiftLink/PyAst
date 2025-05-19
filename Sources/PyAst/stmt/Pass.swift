@@ -61,7 +61,9 @@ public extension AST {
 
 	
 	
-	struct NoneType: ExprProtocol, CustomStringConvertible {
+    struct NoneType: ExprProtocol, CustomStringConvertible {
+        
+        
 		public let type: AST.ExprType = .NoneType
 		
 		public var description: String = "None"
@@ -75,7 +77,14 @@ public extension AST {
 		
 		public var name: String { description }
 		
-		
+        public init() {
+            self.lineno = -1
+            self.col_offset = -1
+            self.end_lineno = nil
+            self.end_col_offset = nil
+            self.type_comment = nil
+        }
+        
 		enum CodingKeys: CodingKey {
 			case __class__
 			

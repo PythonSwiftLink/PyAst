@@ -43,6 +43,18 @@ extension AST {
 			end_lineno = nil
 			type_comment = nil
 		}
+        
+        public init(arg: String, annotation: ExprProtocol) {
+            self.arg = arg
+            self.annotation = annotation
+            
+            lineno = -1
+            col_offset = -1
+            end_col_offset = nil
+            end_lineno = nil
+            type_comment = nil
+            
+        }
 		
 		public init(from decoder: Decoder) throws {
 			let c: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)

@@ -23,6 +23,69 @@ extension ExprProtocol {
 	public var name: String { fatalError() }
 }
 
+public struct AnyExpr: ExprProtocol {
+    public init(value: any ExprProtocol) {
+        self.lineno = -1
+        self.col_offset = -1
+        self.end_lineno = nil
+        self.end_col_offset = nil
+        self.type_comment = nil
+        self.value = value
+    }
+    
+    
+    
+    public var type: AST.ExprType { value.type }
+    
+    public var lineno: Int
+    
+    public var col_offset: Int
+    
+    public var end_lineno: Int?
+    
+    public var end_col_offset: Int?
+    
+    public var type_comment: String?
+    
+    public var value: any ExprProtocol
+    
+    public var name: String { value.name }
+    
+    private enum CodingKeys: CodingKey {
+        case value
+        case type
+        case lineno
+        case col_offset
+        case end_lineno
+        case end_col_offset
+        case type_comment
+    }
+    
+    public init(from decoder: any Decoder) throws {
+        let container: KeyedDecodingContainer<AnyExpr.CodingKeys> = try decoder.container(keyedBy: AnyExpr.CodingKeys.self)
+        
+        self.lineno = try container.decode(Int.self, forKey: AnyExpr.CodingKeys.lineno)
+        self.col_offset = try container.decode(Int.self, forKey: AnyExpr.CodingKeys.col_offset)
+        self.end_lineno = try container.decodeIfPresent(Int.self, forKey: AnyExpr.CodingKeys.end_lineno)
+        self.end_col_offset = try container.decodeIfPresent(Int.self, forKey: AnyExpr.CodingKeys.end_col_offset)
+        self.type_comment = try container.decodeIfPresent(String.self, forKey: AnyExpr.CodingKeys.type_comment)
+        fatalError()
+    }
+    
+    public func encode(to encoder: any Encoder) throws {
+        var container: KeyedEncodingContainer<AnyExpr.CodingKeys> = encoder.container(keyedBy: AnyExpr.CodingKeys.self)
+        
+        try container.encode(self.type, forKey: AnyExpr.CodingKeys.type)
+        try container.encode(self.lineno, forKey: AnyExpr.CodingKeys.lineno)
+        try container.encode(self.col_offset, forKey: AnyExpr.CodingKeys.col_offset)
+        try container.encodeIfPresent(self.end_lineno, forKey: AnyExpr.CodingKeys.end_lineno)
+        try container.encodeIfPresent(self.end_col_offset, forKey: AnyExpr.CodingKeys.end_col_offset)
+        try container.encodeIfPresent(self.type_comment, forKey: AnyExpr.CodingKeys.type_comment)
+        fatalError()
+    }
+    
+    
+}
 
 
 public struct AST {
@@ -132,9 +195,7 @@ extension AST {
 		
 		public var body: [Stmt]
 		
-		public var name: String {
-			""
-		}
+		public var name: String = ""
 		
 		enum CodingKeys: CodingKey {
 			case body
